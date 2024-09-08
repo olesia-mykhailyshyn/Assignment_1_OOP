@@ -1,6 +1,18 @@
-cmake_minimum_required(VERSION 3.28)
+cmake_minimum_required(VERSION 3.10)
 project(Assignment_1)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(Assignment_1 main.cpp)
+include_directories(${CMAKE_SOURCE_DIR})
+
+add_executable(Assignment_1
+        main.cpp
+        CLI.cpp
+        Flight.cpp
+        FileReader.cpp
+        airplane.cpp
+        Ticket.cpp
+        FileReader.h
+        parsing.cpp
+        parsing.h
+)
