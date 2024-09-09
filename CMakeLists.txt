@@ -9,10 +9,8 @@ add_executable(Assignment_1
         main.cpp
         CLI.cpp
         Flight.cpp
-        FileReader.cpp
         airplane.cpp
         Ticket.cpp
-        FileReader.h
         parsing.cpp
         parsing.h
 )

@@ -1,93 +1,76 @@
-#include "Parsing.h"
-#include <fstream>
-#include <sstream>
+#include "parsing.h"
 #include <iostream>
+#include <sstream>
+#include <regex>
+#include <fstream>
 
-vector<PriceRange> parsePriceRanges(const string& rangeStr) {
-    vector<PriceRange> priceRanges;
-    stringstream ss(rangeStr);
-    string range;
+using namespace std;
 
-    while (ss >> range) {
-        if (range.empty()) continue;
+Flight parseLine(const string &line) {
+    Flight flight;
+    smatch match;
+    regex pattern(R"((\d{2}\.\d{2}\.\d{4})\s+([A-Z0-9]+)\s+(\d+)\s+((?:\d+-\d+\s+\d+\$\s*)+))");
 
-        PriceRange priceRange;
-        size_t dollarPos = range.find('$');
-        if (dollarPos == string::npos) {
-            cerr << "Invalid format for price range: " << range << endl;
-            continue;
+    if (regex_search(line, match, pattern)) {
+        flight.date = match[1];
+        flight.flight_number = match[2];
+        flight.seats_per_row = stoi(match[3]);
+
+        string prices = match[4];
+        regex price_pattern(R"((\d+)-(\d+)\s+(\d+)\$)");
+        smatch price_match;
+        string::const_iterator search_start(prices.cbegin());
+
+        while (regex_search(search_start, prices.cend(), price_match, price_pattern)) {
+            PriceRange pr;
+            pr.start_row = stoi(price_match[1]);
+            pr.end_row = stoi(price_match[2]);
+            pr.price = stoi(price_match[3]);
+            flight.price_ranges.push_back(pr);
+
+            search_start = price_match.suffix().first;
         }
-
-        string seats = range.substr(0, dollarPos);
-        string priceStr = range.substr(dollarPos + 1);
-
-        size_t dashPos = seats.find('-');
-        if (dashPos == string::npos) {
-            cerr << "Invalid seat range format: " << seats << endl;
-            continue;
-        }
-
-        string startSeatStr = seats.substr(0, dashPos);
-        string endSeatStr = seats.substr(dashPos + 1);
-
-        try {
-            priceRange.startSeat = stoi(startSeatStr);
-            priceRange.endSeat = stoi(endSeatStr);
-        } catch (const invalid_argument& e) {
-            cerr << "Invalid seat range format: " << seats << endl;
-            continue;
-        }
-
-        try {
-            priceRange.price = stoi(priceStr);
-        } catch (const invalid_argument& e) {
-            cerr << "Invalid price format: " << priceStr << endl;
-            continue;
-        }
-
-        priceRanges.push_back(priceRange);
     }
 
-    return priceRanges;
+    return flight;
 }
 
-vector<Flight> parseFlights(const string& filename) {
+vector<Flight> parseData(const string &data) {
     vector<Flight> flights;
-    ifstream file(filename);
-
-    if (!file.is_open()) {
-        cerr << "Could not open the file: " << filename << endl;
-        return flights;
-    }
-
+    stringstream ss(data);
     string line;
-    while (getline(file, line)) {
-        if (line.empty() || line[0] == '/') continue;
 
-        Flight flight;
-        stringstream ss(line);
-        string priceRangesStr;
-
-        ss >> flight.date >> flight.flightNumber >> flight.totalSeats;
-
-        getline(ss, priceRangesStr);
-        priceRangesStr = priceRangesStr.substr(1);
-
-        flight.priceRanges = parsePriceRanges(priceRangesStr);
-        flights.push_back(flight);
+    while (getline(ss, line)) {
+        Flight flight = parseLine(line);
+        if (!flight.flight_number.empty()) {
+            flights.push_back(flight);
+        }
     }
 
-    file.close();
     return flights;
 }
 
-void printFlights(const vector<Flight>& flights) {
-    for (const auto& flight : flights) {
-        cout << "Date: " << flight.date << ", Flight Number: " << flight.flightNumber
-             << ", Total Seats: " << flight.totalSeats << endl;
-        for (const auto& range : flight.priceRanges) {
-            cout << "  Seats " << range.startSeat << "-" << range.endSeat
-                 << ": $" << range.price << endl;
+void displayFlights(const vector<Flight> &flights) {
+    for (const auto &flight : flights) {
+        cout << "Date: " << flight.date << endl;
+        cout << "Flight Number: " << flight.flight_number << endl;
+        cout << "Seats per row: " << flight.seats_per_row << endl;
+        cout << "Price Ranges:" << endl;
+        for (const auto &pr : flight.price_ranges) {
+            cout << "  Rows " << pr.start_row << "-" << pr.end_row << ": $" << pr.price << endl;
         }
+        cout << "--------------------------" << endl;
     }
+}
+
+bool readFlightData(const string &filename, vector<Airplane> &airplanes) {
+
+    ifstream file(filename);
+    if (!file.is_open()) {
+        return false;
+    }
+
+
+    file.close();
+    return true;
 }

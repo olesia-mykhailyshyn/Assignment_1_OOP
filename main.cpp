@@ -1,7 +1,8 @@
 #include <iostream>
 #include <vector>
-#include "Parsing.h"
-#include "FileReader.h"
+#include <fstream>
+#include <sstream>
+#include "parsing.h"
 #include "CLI.h"
 
 using namespace std;
@@ -10,18 +11,29 @@ int main() {
     vector<Flight> flights;
     string filename = R"(C:\KSE\OOP_design\Assignment_1\configFile.txt)";
 
-    flights = parseFlights(filename);
+    ifstream file(filename);
+    if (!file.is_open()) {
+        cerr << "Error opening file: " << filename << endl;
+        return 1;
+    }
+
+    stringstream buffer;
+    buffer << file.rdbuf();
+    string data = buffer.str();
+    file.close();
+
+    flights = parseData(data);
 
     if (flights.empty()) {
         cerr << "No flight data loaded. Exiting." << endl;
         return 1;
     }
 
-    printFlights(flights);
+    displayFlights(flights);
 
     vector<Airplane> airplanes;
 
-    if (!FileReader::readFlightData(filename, airplanes)) {
+    if (!readFlightData(filename, airplanes)) {
         cerr << "Failed to read flight data from file." << endl;
         return 1;
     }
@@ -34,7 +46,6 @@ int main() {
     Airplane& airplane = airplanes[0];
 
     CLI cli(airplane);
-
     cli.run();
 
     return 0;

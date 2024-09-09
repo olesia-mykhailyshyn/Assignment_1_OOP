@@ -2,23 +2,28 @@
 
 #include <string>
 #include <vector>
-#include "Airplane.h"
+#include "airplane.h"
 
 using namespace std;
 
 struct PriceRange {
-    int startSeat;
-    int endSeat;
+    int start_row;
+    int end_row;
     int price;
 };
 
 struct Flight {
     string date;
-    string flightNumber;
-    int totalSeats;
-    vector<PriceRange> priceRanges;
+    string flight_number;
+    int seats_per_row;
+    vector<PriceRange> price_ranges;
 };
 
-vector<PriceRange> parsePriceRanges(const string& rangeStr);
-vector<Flight> parseFlights(const string& filename);
-void printFlights(const vector<Flight>& flights);
+Flight parseLine(const string &line);
+
+vector<Flight> parseData(const string &data);
+
+void displayFlights(const vector<Flight> &flights);
+
+bool readFlightData(const string &filename, vector<Airplane> &airplanes);
+
