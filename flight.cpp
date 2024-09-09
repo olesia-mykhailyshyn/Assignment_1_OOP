@@ -1,4 +1,4 @@
-#include "flight.h"
+#include "Flight.h"
 #include <iostream>
 
 using namespace std;
@@ -10,7 +10,7 @@ void Flight::addTicket(const Ticket& ticket) {
     tickets.push_back(ticket);
 }
 
-void Flight::removeTicket(const std::string& seat) {
+void Flight::removeTicket(const string& seat) {
     for (auto it = tickets.begin(); it != tickets.end(); ++it) {
         if (it->getSeat() == seat) {
             tickets.erase(it);

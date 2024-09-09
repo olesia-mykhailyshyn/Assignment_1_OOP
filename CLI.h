@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include "airplane.h"
+#include "Airplane.h"
 
 class CLI {
 public:

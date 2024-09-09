@@ -2,10 +2,10 @@
 
 #include <string>
 #include <vector>
-#include "ticket.h"
-#include "airplane.h"
+#include "Ticket.h"
+#include "Airplane.h"
 
-using namespace  std;
+using namespace std;
 
 class Flight {
 public:

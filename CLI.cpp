@@ -1,6 +1,5 @@
 #include "CLI.h"
 #include <iostream>
-#include "airplane.h"
 
 using namespace std;
 
@@ -38,6 +37,7 @@ void CLI::bookTicket() {
     cout << "Enter passenger name: ";
     cin >> passengerName;
 
+    // Example flight number and price; in real use, these should be dynamic
     string flightNumber = "FL123";
     int price = 100;
 
@@ -61,5 +61,5 @@ void CLI::returnTicket() {
 }
 
 void CLI::viewBookedTickets() {
-    cout << "Functionality not implemented.\n";
+    airplane.viewBookedTickets();
 }

@@ -10,14 +10,13 @@ using namespace std;
 class Airplane {
 private:
     int seats;
-    std::map<int, int> pricing;
-    std::map<std::string, Ticket> bookedTickets;
+    map<int, int> pricing;
+    map<string, Ticket> bookedTickets;
 
 public:
-    Airplane(int seats, const std::map<int, int>& pricing);
-    bool bookSeat(const std::string& seat, const Ticket& ticket);
-    bool returnTicket(const std::string& seat);
+    Airplane(int seats, const map<int, int>& pricing);
+    bool bookSeat(const string& seat, const Ticket& ticket);
+    bool returnTicket(const string& seat);
     void displayAvailableSeats() const;
     void viewBookedTickets() const;
 };
-

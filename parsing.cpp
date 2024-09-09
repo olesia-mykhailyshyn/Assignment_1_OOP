@@ -6,6 +6,7 @@
 
 using namespace std;
 
+// Function to parse each line and extract flight information
 Flight parseLine(const string &line) {
     Flight flight;
     smatch match;
@@ -35,6 +36,7 @@ Flight parseLine(const string &line) {
     return flight;
 }
 
+// Function to parse all the data lines
 vector<Flight> parseData(const string &data) {
     vector<Flight> flights;
     stringstream ss(data);
@@ -50,6 +52,7 @@ vector<Flight> parseData(const string &data) {
     return flights;
 }
 
+// Function to display the parsed flight data
 void displayFlights(const vector<Flight> &flights) {
     for (const auto &flight : flights) {
         cout << "Date: " << flight.date << endl;
@@ -63,14 +66,31 @@ void displayFlights(const vector<Flight> &flights) {
     }
 }
 
+// Function to read flight data from a file and populate airplanes vector
 bool readFlightData(const string &filename, vector<Airplane> &airplanes) {
-
     ifstream file(filename);
     if (!file.is_open()) {
         return false;
     }
 
-
+    stringstream buffer;
+    buffer << file.rdbuf();
+    string data = buffer.str();
     file.close();
+
+    // Parse flight data and create Airplane objects (placeholder example)
+    vector<Flight> flights = parseData(data);
+    for (const auto& flight : flights) {
+        // Assuming a fixed number of seats and dummy pricing for the example
+        map<int, int> dummyPricing;
+        for (const auto& pr : flight.price_ranges) {
+            for (int i = pr.start_row; i <= pr.end_row; ++i) {
+                dummyPricing[i] = pr.price;
+            }
+        }
+        Airplane airplane(flight.seats_per_row, dummyPricing);
+        airplanes.push_back(airplane);
+    }
+
     return true;
 }

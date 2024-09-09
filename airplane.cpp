@@ -1,5 +1,4 @@
 #include "Airplane.h"
-#include "Ticket.h"
 #include <iostream>
 
 using namespace std;
@@ -37,7 +36,7 @@ void Airplane::displayAvailableSeats() const {
 
 void Airplane::viewBookedTickets() const {
     if (bookedTickets.empty()) {
-        std::cout << "No tickets booked yet.\n";
+        cout << "No tickets booked yet.\n";
     } else {
         for (const auto& pair : bookedTickets) {
             cout << "Seat: " << pair.first << ", Passenger: " << pair.second.getPassengerName() << endl;

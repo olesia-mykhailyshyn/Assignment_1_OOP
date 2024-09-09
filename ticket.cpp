@@ -1,9 +1,9 @@
-#include "ticket.h"
+#include "Ticket.h"
 
 Ticket::Ticket()
         : passengerName(""), seat(""), flightNumber(""), price(0) {}
 
-Ticket::Ticket(const std::string& passengerName, const std::string& seat, const std::string& flightNumber, int price)
+Ticket::Ticket(const string& passengerName, const string& seat, const string& flightNumber, int price)
         : passengerName(passengerName), seat(seat), flightNumber(flightNumber), price(price) {}
 
 Ticket::Ticket(const Ticket& other)
@@ -37,15 +37,15 @@ Ticket& Ticket::operator=(Ticket&& other) noexcept {
     return *this;
 }
 
-std::string Ticket::getPassengerName() const {
+string Ticket::getPassengerName() const {
     return passengerName;
 }
 
-std::string Ticket::getSeat() const {
+string Ticket::getSeat() const {
     return seat;
 }
 
-std::string Ticket::getFlightNumber() const {
+string Ticket::getFlightNumber() const {
     return flightNumber;
 }
 
