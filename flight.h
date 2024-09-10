@@ -1,22 +1,25 @@
-#pragma once
+
+#ifndef FLIGHT_H
+#define FLIGHT_H
 
 #include <string>
 #include <vector>
-#include "Ticket.h"
 #include "Airplane.h"
+#include "Ticket.h"
 
-using namespace std;
-
-class Flight {
+class FlightDetails {
 public:
-    Flight(const string& flightNumber, const Airplane& airplane);
-    void addTicket(const Ticket& ticket);
-    void removeTicket(const string& seat);
-    void displayTickets() const;
-    void displayFlightDetails() const;
+    FlightDetails(const std::string& flightNumber, const Airplane& airplane);
+    bool checkSeatAvailability(const std::string& seat) const;
+    bool bookSeat(const std::string& seat, const Ticket& ticket);
+    bool cancelBooking(const std::string& seat);
+    void displayBookedSeats() const;
 
 private:
-    string flightNumber;
+    std::string flightNumber;
     Airplane airplane;
-    vector<Ticket> tickets;
+    std::vector<Ticket> tickets;
+    std::string date;
 };
+
+#endif // FLIGHT_H

@@ -5,12 +5,4 @@ set(CMAKE_CXX_STANDARD 17)
 
 include_directories(${CMAKE_SOURCE_DIR})
 
-add_executable(Assignment_1
-        main.cpp
-        CLI.cpp
-        Flight.cpp
-        airplane.cpp
-        Ticket.cpp
-        parsing.cpp
-        parsing.h
-)
+add_executable(Assignment_1 main.cpp airplane.cpp parsing.cpp flight.cpp ticket.cpp CLI.cpp)

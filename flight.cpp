@@ -1,33 +1,24 @@
+
 #include "Flight.h"
-#include <iostream>
+
 
 using namespace std;
 
-Flight::Flight(const string& flightNumber, const Airplane& airplane)
+FlightDetails::FlightDetails(const std::string& flightNumber, const Airplane& airplane)
         : flightNumber(flightNumber), airplane(airplane) {}
 
-void Flight::addTicket(const Ticket& ticket) {
-    tickets.push_back(ticket);
+bool FlightDetails::checkSeatAvailability(const std::string& seat) const {
+    return airplane.bookedTickets.find(seat) == airplane.bookedTickets.end();
 }
 
-void Flight::removeTicket(const string& seat) {
-    for (auto it = tickets.begin(); it != tickets.end(); ++it) {
-        if (it->getSeat() == seat) {
-            tickets.erase(it);
-            return;
-        }
-    }
+bool FlightDetails::bookSeat(const std::string& seat, const Ticket& ticket) {
+    return airplane.bookSeat(seat, ticket);
 }
 
-void Flight::displayTickets() const {
-    cout << "Tickets for flight " << flightNumber << ":\n";
-    for (const auto& ticket : tickets) {
-        cout << "Seat: " << ticket.getSeat() << ", Passenger: " << ticket.getPassengerName() << endl;
-    }
+bool FlightDetails::cancelBooking(const std::string& seat) {
+    return airplane.returnTicket(seat);
 }
 
-void Flight::displayFlightDetails() const {
-    cout << "Flight Number: " << flightNumber << endl;
-    cout << "Airplane Details:\n";
-    airplane.displayAvailableSeats();
+void FlightDetails::displayBookedSeats() const {
+    airplane.viewBookedTickets();
 }

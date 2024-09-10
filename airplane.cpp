@@ -24,15 +24,32 @@ bool Airplane::returnTicket(const string& seat) {
 }
 
 void Airplane::displayAvailableSeats() const {
-    cout << "Available seats:\n";
+    cout << "Flight Number: " << "FR123" << endl;
+    cout << "Total Seats: " << seats << endl;
+    cout << "----- Available Seats -----" << endl;
+
+    int columns = 2;
     for (int i = 1; i <= seats; ++i) {
         string seat = to_string(i);
         if (bookedTickets.find(seat) == bookedTickets.end()) {
-            cout << seat << " ";
+            cout << seat;
+        } else {
+            cout << "X";
+        }
+
+        if (i % columns == 0) {
+            cout << "  ";
+        } else {
+            cout << "\t";
+        }
+
+        if (i % (columns * 5) == 0) {
+            cout << endl;
         }
     }
-    cout << endl;
+    cout << "\n----------------------------\n";
 }
+
 
 void Airplane::viewBookedTickets() const {
     if (bookedTickets.empty()) {
@@ -42,4 +59,14 @@ void Airplane::viewBookedTickets() const {
             cout << "Seat: " << pair.first << ", Passenger: " << pair.second.getPassengerName() << endl;
         }
     }
+}
+
+void Airplane::getAvailableSeatsWithPrices() const {
+    cout << "Available seats with prices:\n";
+    for (const auto& [seat, price] : pricing) {
+        if (bookedTickets.find(to_string(seat)) == bookedTickets.end()) {
+            cout << seat << " " << price << "$, ";
+        }
+    }
+    cout << endl;
 }

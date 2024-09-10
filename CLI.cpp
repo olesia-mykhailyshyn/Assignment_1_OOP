@@ -1,3 +1,4 @@
+
 #include "CLI.h"
 #include <iostream>
 
@@ -6,60 +7,84 @@ using namespace std;
 CLI::CLI(Airplane& airplane) : airplane(airplane) {}
 
 void CLI::run() {
-    int choice;
-    do {
-        cout << "1. Check seat availability\n";
-        cout << "2. Book a ticket\n";
-        cout << "3. Return a ticket\n";
-        cout << "4. View booked tickets\n";
-        cout << "5. Exit\n";
-        cout << "Enter your choice: ";
-        cin >> choice;
-        switch (choice) {
-            case 1: checkSeatAvailability(); break;
-            case 2: bookTicket(); break;
-            case 3: returnTicket(); break;
-            case 4: viewBookedTickets(); break;
-            case 5: cout << "Exiting...\n"; break;
-            default: cout << "Invalid choice.\n";
+    string command;
+    while (true) {
+        cout << "\n------- Welcome to the Airplane Reservation System -------" << endl;
+        cout << "1. Display Flights" << endl;
+        cout << "2. Check Seat Availability" << endl;
+        cout << "3. Book Ticket" << endl;
+        cout << "4. Return Ticket" << endl;
+        cout << "5. Exit" << endl;
+        cout << "--------------------------------------------------------" << endl;
+        cout << "> ";
+        cin >> command;
+
+        if (command == "1") {
+        } else if (command == "2") {
+            checkSeatAvailability();
+        } else if (command == "3") {
+            string date, flightNumber, seat, username;
+            cout << "Enter Date, Flight Number, Seat, Username: ";
+            cin >> date >> flightNumber >> seat >> username;
+            bookTicket(date, flightNumber, seat, username);
+        } else if (command == "4") {
+            string bookingID;
+            cout << "Enter Booking ID: ";
+            cin >> bookingID;
+            returnTicket(bookingID);
+        } else if (command == "5") {
+            cout << "Logging out..." << endl;
+            break;
+        } else {
+            cout << "Invalid command, please try again." << endl;
         }
-    } while (choice != 5);
+    }
 }
+
 
 void CLI::checkSeatAvailability() {
     airplane.displayAvailableSeats();
 }
 
-void CLI::bookTicket() {
-    string seat, passengerName;
-    cout << "Enter seat number: ";
-    cin >> seat;
-    cout << "Enter passenger name: ";
-    cin >> passengerName;
-
-    // Example flight number and price; in real use, these should be dynamic
-    string flightNumber = "FL123";
-    int price = 100;
-
-    Ticket ticket(passengerName, seat, flightNumber, price);
-    if (airplane.bookSeat(seat, ticket)) {
-        cout << "Ticket booked successfully.\n";
+void CLI::bookTicket(const std::string& date, const std::string& flightNumber, const std::string& seat, const std::string& username) {
+    int price = 100;  // Replace with logic to fetch dynamic pricing
+    Ticket ticket(username, seat, flightNumber, price);
+    bool success = airplane.bookSeat(seat, ticket);
+    if (success) {
+        cout << "Ticket booked successfully for " << username << ".";
     } else {
-        cout << "Error: Seat is already booked.\n";
+        cout << "Error: Seat is already booked.";
     }
 }
 
-void CLI::returnTicket() {
-    string seat;
-    cout << "Enter seat number to return: ";
-    cin >> seat;
-    if (airplane.returnTicket(seat)) {
-        cout << "Ticket returned successfully.\n";
+void CLI::returnTicket(const std::string& bookingID) {
+}
+
+void CLI::viewBookingByID(const std::string& bookingID) {
+    // Assuming bookingID is the seat number for simplicity
+    auto it = airplane.bookedTickets.find(bookingID);
+    if (it != airplane.bookedTickets.end()) {
+        cout << "Booking found for seat " << bookingID << ":" << endl;
+        cout << "Passenger Name: " << it->second.getPassengerName() << endl;
+        cout << "Flight Number: " << it->second.getFlightNumber() << endl;
+        cout << "Price: $" << it->second.getPrice() << endl;
     } else {
-        cout << "Error: Seat not found.\n";
+        cout << "Error: No booking found for seat " << bookingID << "." << endl;
     }
 }
 
-void CLI::viewBookedTickets() {
-    airplane.viewBookedTickets();
+void CLI::viewBookingsByUsername(const std::string& username) {
+}
+
+void CLI::viewBookingsByFlight(const std::string& date, const std::string& flightNumber) {
+    bool found = false;
+    for (const auto& [seat, ticket] : airplane.bookedTickets) {
+        if (ticket.getFlightNumber() == flightNumber) {
+            cout << "Seat: " << seat << ", Passenger: " << ticket.getPassengerName() << ", Price: $" << ticket.getPrice() << endl;
+            found = true;
+        }
+    }
+    if (!found) {
+        cout << "No bookings found for flight " << flightNumber << " on date " << date << "." << endl;
+    }
 }
