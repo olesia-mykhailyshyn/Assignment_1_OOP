@@ -124,7 +124,7 @@ void displaySeats(const Flight &flight) {
             if (flight.isSeatAvailable(seat)) {
                 cout << "AV ";
             } else {
-                cout << "X ";
+                cout << "A ";
             }
         }
         cout << endl;

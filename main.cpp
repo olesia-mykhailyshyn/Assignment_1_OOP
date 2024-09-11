@@ -1,13 +1,11 @@
 #include <iostream>
 #include <vector>
-#include <fstream>
-#include <sstream>
-#include "parsing.h"
+#include "FileReader.h"
+#include "Airplane.h"
 
 using namespace std;
 
-// View bookings by Booking ID
-void viewBookingByID(const vector<Flight>& flights, int bookingID) {
+void viewBookingByID(const vector<Airplane>& flights, int bookingID) {
     for (const auto& flight : flights) {
         for (const auto& [seat, booking] : flight.bookings) {
             if (booking.bookingID == bookingID) {
@@ -22,8 +20,7 @@ void viewBookingByID(const vector<Flight>& flights, int bookingID) {
     cout << "> Booking ID " << bookingID << " not found!" << endl;
 }
 
-// View bookings by Username
-void viewBookingsByUsername(const vector<Flight>& flights, const string& username) {
+void viewBookingsByUsername(const vector<Airplane>& flights, const string& username) {
     bool bookingFound = false;
     for (const auto& flight : flights) {
         for (const auto& [seat, booking] : flight.bookings) {
@@ -41,8 +38,7 @@ void viewBookingsByUsername(const vector<Flight>& flights, const string& usernam
     }
 }
 
-// View bookings for a specific flight (date and flight number)
-void viewBookingsByFlight(const vector<Flight>& flights, const string& date, const string& flightNumber) {
+void viewBookingsByFlight(const vector<Airplane>& flights, const string& date, const string& flightNumber) {
     bool flightFound = false;
     for (const auto& flight : flights) {
         if (flight.date == date && flight.flight_number == flightNumber) {
@@ -62,21 +58,7 @@ void viewBookingsByFlight(const vector<Flight>& flights, const string& date, con
 }
 
 int main() {
-    vector<Flight> flights;
-    string filename = "C:\\KSE\\OOP_design\\Assignment_1\\configFile.txt";
-
-    ifstream file(filename);
-    if (!file.is_open()) {
-        cerr << "Error opening file: " << filename << endl;
-        return 1;
-    }
-
-    stringstream buffer;
-    buffer << file.rdbuf();
-    string data = buffer.str();
-    file.close();
-
-    flights = parseData(data);
+    vector<Airplane> flights = FileReader::parseData("C:\\KSE\\OOP_design\\Assignment_1\\configFile.txt");
 
     if (flights.empty()) {
         cerr << "No flight data loaded. Exiting." << endl;
@@ -99,8 +81,8 @@ int main() {
             for (const auto& flight : flights) {
                 if (flight.date == date && flight.flight_number == flightNumber) {
                     flightFound = true;
-                    displayFlightInfo(flight);
-                    displaySeats(flight);
+                    flight.displayFlightInfo();
+                    flight.displaySeats();
                     break;
                 }
             }
@@ -108,8 +90,7 @@ int main() {
             if (!flightFound) {
                 cout << "Flight not found for the given date and flight number." << endl;
             }
-        }
-        else if (command == "book") {
+        } else if (command == "book") {
             string date, flightNumber, seat, username;
             cout << "Enter flight date (DD.MM.YYYY): ";
             cin >> date;
@@ -132,8 +113,7 @@ int main() {
             if (!flightFound) {
                 cout << "Flight not found for the given date and flight number." << endl;
             }
-        }
-        else if (command == "return") {
+        } else if (command == "return") {
             int bookingID;
             cout << "Enter booking ID: ";
             cin >> bookingID;
@@ -149,8 +129,7 @@ int main() {
             if (!bookingFound) {
                 cout << "> Booking ID " << bookingID << " not found!" << endl;
             }
-        }
-        else if (command == "view") {
+        } else if (command == "view") {
             string option;
             cout << "Enter 'ID', 'username', or 'flight': ";
             cin >> option;
@@ -159,28 +138,24 @@ int main() {
                 int bookingID;
                 cout << "Enter booking ID: ";
                 cin >> bookingID;
-                viewBookingByID(flights, bookingID);  // View booking by ID
-            }
-            else if (option == "username") {
+                viewBookingByID(flights, bookingID);
+            } else if (option == "username") {
                 string username;
                 cout << "Enter username: ";
                 cin >> username;
-                viewBookingsByUsername(flights, username);  // View bookings by username
-            }
-            else if (option == "flight") {
+                viewBookingsByUsername(flights, username);
+            } else if (option == "flight") {
                 string date, flightNumber;
                 cout << "Enter flight date (DD.MM.YYYY): ";
                 cin >> date;
                 cout << "Enter flight number: ";
                 cin >> flightNumber;
-                viewBookingsByFlight(flights, date, flightNumber);  // View bookings by flight details
+                viewBookingsByFlight(flights, date, flightNumber);
             }
-        }
-        else if (command == "exit") {
+        } else if (command == "exit") {
             cout << "Exiting the program." << endl;
             break;
-        }
-        else {
+        } else {
             cout << "Unknown command. Please enter 'check', 'book', 'return', 'view', or 'exit'." << endl;
         }
     }
