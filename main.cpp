@@ -3,13 +3,13 @@
 #include <fstream>
 #include <sstream>
 #include "parsing.h"
-#include "CLI.h"
 
 using namespace std;
 
 int main() {
+
     vector<Flight> flights;
-    string filename = R"(C:\KSE\OOP_design\Assignment_1\configFile.txt)";
+    string filename = "C:\\KSE\\OOP_design\\Assignment_1\\configFile.txt";
 
     ifstream file(filename);
     if (!file.is_open()) {
@@ -29,24 +29,27 @@ int main() {
         return 1;
     }
 
-    displayFlights(flights);
+    string date, flightNumber;
+    cout << "Enter flight date (DD.MM.YYYY): ";
+    cin >> date;
+    cout << "Enter flight number: ";
+    cin >> flightNumber;
 
-    vector<Airplane> airplanes;
+    bool flightFound = false;
+    for (const auto &flight : flights) {
+        if (flight.date == date && flight.flight_number == flightNumber) {
+            flightFound = true;
 
-    if (!readFlightData(filename, airplanes)) {
-        cerr << "Failed to read flight data from file." << endl;
-        return 1;
+            displayFlightInfo(flight);
+
+            displaySeats(flight);
+            break;
+        }
     }
 
-    if (airplanes.empty()) {
-        cerr << "No airplanes loaded. Exiting." << endl;
-        return 1;
+    if (!flightFound) {
+        cout << "Flight not found for the given date and flight number." << endl;
     }
-
-    Airplane& airplane = airplanes[0];
-
-    CLI cli(airplane);
-    cli.run();
 
     return 0;
 }

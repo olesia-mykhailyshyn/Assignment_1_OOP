@@ -2,11 +2,9 @@
 #include <iostream>
 #include <sstream>
 #include <regex>
-#include <fstream>
 
 using namespace std;
 
-// Function to parse each line and extract flight information
 Flight parseLine(const string &line) {
     Flight flight;
     smatch match;
@@ -36,7 +34,6 @@ Flight parseLine(const string &line) {
     return flight;
 }
 
-// Function to parse all the data lines
 vector<Flight> parseData(const string &data) {
     vector<Flight> flights;
     stringstream ss(data);
@@ -52,45 +49,39 @@ vector<Flight> parseData(const string &data) {
     return flights;
 }
 
-// Function to display the parsed flight data
-void displayFlights(const vector<Flight> &flights) {
-    for (const auto &flight : flights) {
-        cout << "Date: " << flight.date << endl;
-        cout << "Flight Number: " << flight.flight_number << endl;
-        cout << "Seats per row: " << flight.seats_per_row << endl;
-        cout << "Price Ranges:" << endl;
-        for (const auto &pr : flight.price_ranges) {
-            cout << "  Rows " << pr.start_row << "-" << pr.end_row << ": $" << pr.price << endl;
-        }
-        cout << "--------------------------" << endl;
+void displayFlightInfo(const Flight &flight) {
+    cout << "Date: " << flight.date << endl;
+    cout << "Flight Number: " << flight.flight_number << endl;
+    cout << "Seats per row: " << flight.seats_per_row << endl;
+
+    cout << "Price per row range:" << endl;
+    for (const auto &priceRange : flight.price_ranges) {
+        cout << "  Rows " << priceRange.start_row << "-" << priceRange.end_row
+             << ": $" << priceRange.price << endl;
     }
+
+    int totalRows = flight.price_ranges.back().end_row;
+    cout << "Total number of rows: " << totalRows << endl;
+
+    int totalSeats = totalRows * flight.seats_per_row;
+    cout << "Total number of seats: " << totalSeats << endl;
+    cout << "--------------------------" << endl;
 }
 
-// Function to read flight data from a file and populate airplanes vector
-bool readFlightData(const string &filename, vector<Airplane> &airplanes) {
-    ifstream file(filename);
-    if (!file.is_open()) {
-        return false;
+void displaySeats(const Flight &flight) {
+    int totalRows = flight.price_ranges.back().end_row;
+    string seats = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; // Seat letters
+
+    for (int i = 0; i < flight.seats_per_row; ++i) {
+        cout << seats[i] << " ";
     }
+    cout << endl;
 
-    stringstream buffer;
-    buffer << file.rdbuf();
-    string data = buffer.str();
-    file.close();
-
-    // Parse flight data and create Airplane objects (placeholder example)
-    vector<Flight> flights = parseData(data);
-    for (const auto& flight : flights) {
-        // Assuming a fixed number of seats and dummy pricing for the example
-        map<int, int> dummyPricing;
-        for (const auto& pr : flight.price_ranges) {
-            for (int i = pr.start_row; i <= pr.end_row; ++i) {
-                dummyPricing[i] = pr.price;
-            }
+    for (int row = 1; row <= totalRows; ++row) {
+        cout << row << " ";
+        for (int col = 0; col < flight.seats_per_row; ++col) {
+            cout << "AV ";
         }
-        Airplane airplane(flight.seats_per_row, dummyPricing);
-        airplanes.push_back(airplane);
+        cout << endl;
     }
-
-    return true;
 }

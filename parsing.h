@@ -2,7 +2,6 @@
 
 #include <string>
 #include <vector>
-#include "Airplane.h"
 
 using namespace std;
 
@@ -21,5 +20,5 @@ struct Flight {
 
 Flight parseLine(const string &line);
 vector<Flight> parseData(const string &data);
-void displayFlights(const vector<Flight> &flights);
-bool readFlightData(const string &filename, vector<Airplane> &airplanes);
+void displaySeats(const Flight &flight);
+void displayFlightInfo(const Flight &flight);
