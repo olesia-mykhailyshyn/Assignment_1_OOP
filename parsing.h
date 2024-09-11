@@ -16,7 +16,7 @@ struct Booking {
     string username;
     string seat;
     int bookingID;
-    int price;  // Price of the ticket
+    int price;
 
     Booking() : username(""), seat(""), bookingID(0), price(0) {}
 

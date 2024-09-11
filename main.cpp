@@ -6,6 +6,20 @@
 
 using namespace std;
 
+void displayBookingInfo(const Flight& flight, int bookingID) {
+    for (const auto& [seat, booking] : flight.bookings) {
+        if (booking.bookingID == bookingID) {
+            cout << "> Flight " << flight.flight_number
+                 << ", " << flight.date
+                 << ", seat " << booking.seat
+                 << ", price " << booking.price << "$"
+                 << ", " << booking.username << endl;
+            return;
+        }
+    }
+    cout << "> Booking ID " << bookingID << " not found!" << endl;
+}
+
 int main() {
     vector<Flight> flights;
     string filename = "C:\\KSE\\OOP_design\\Assignment_1\\configFile.txt";
@@ -30,7 +44,7 @@ int main() {
 
     while (true) {
         string command;
-        cout << "\nEnter command (check/book/return/exit): ";
+        cout << "\nEnter command (check/book/return/view/exit): ";
         cin >> command;
 
         if (command == "check") {
@@ -41,7 +55,7 @@ int main() {
             cin >> flightNumber;
 
             bool flightFound = false;
-            for (const auto &flight : flights) {
+            for (const auto& flight : flights) {
                 if (flight.date == date && flight.flight_number == flightNumber) {
                     flightFound = true;
                     displayFlightInfo(flight);
@@ -66,7 +80,7 @@ int main() {
             cin >> username;
 
             bool flightFound = false;
-            for (auto &flight : flights) {
+            for (auto& flight : flights) {
                 if (flight.date == date && flight.flight_number == flightNumber) {
                     flightFound = true;
                     flight.bookSeat(seat, username);
@@ -84,15 +98,35 @@ int main() {
             cin >> bookingID;
 
             bool bookingFound = false;
-            for (auto &flight : flights) {
+            for (auto& flight : flights) {
                 if (flight.returnTicket(bookingID)) {
                     bookingFound = true;
-                    break;  // Exit the loop if booking is found and returned
+                    break;
                 }
             }
 
             if (!bookingFound) {
-                // Ensure the "not found" message is printed only once
+                cout << "> Booking ID " << bookingID << " not found!" << endl;
+            }
+        }
+        else if (command == "view") {
+            int bookingID;
+            cout << "Enter booking ID: ";
+            cin >> bookingID;
+
+            bool bookingFound = false;
+            for (const auto& flight : flights) {
+                for (const auto& [seat, booking] : flight.bookings) {
+                    if (booking.bookingID == bookingID) {
+                        displayBookingInfo(flight, bookingID);
+                        bookingFound = true;
+                        break;
+                    }
+                }
+                if (bookingFound) break;
+            }
+
+            if (!bookingFound) {
                 cout << "> Booking ID " << bookingID << " not found!" << endl;
             }
         }
@@ -101,7 +135,7 @@ int main() {
             break;
         }
         else {
-            cout << "Unknown command. Please enter 'check', 'book', 'return', or 'exit'." << endl;
+            cout << "Unknown command. Please enter 'check', 'book', 'return', 'view', or 'exit'." << endl;
         }
     }
 

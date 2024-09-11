@@ -51,12 +51,10 @@ vector<Flight> parseData(const string &data) {
     return flights;
 }
 
-// Check if the seat is available
 bool Flight::isSeatAvailable(const string& seat) const {
     return bookings.find(seat) == bookings.end();
 }
 
-// Get the price for the seat based on its row
 int Flight::getPriceForSeat(const string& seat) const {
     int row = stoi(seat.substr(0, seat.size() - 1));  // Extract row number from seat
     for (const auto& priceRange : price_ranges) {
@@ -64,10 +62,9 @@ int Flight::getPriceForSeat(const string& seat) const {
             return priceRange.price;
         }
     }
-    return 0;  // Default if no price found
+    return 0;
 }
 
-// Book a seat and generate a booking ID
 bool Flight::bookSeat(const string& seat, const string& username) {
     if (isSeatAvailable(seat)) {
         int bookingID = generateBookingID();
@@ -80,7 +77,6 @@ bool Flight::bookSeat(const string& seat, const string& username) {
     return false;
 }
 
-// Return a ticket and provide a refund
 bool Flight::returnTicket(int bookingID) {
     for (auto it = bookings.begin(); it != bookings.end(); ++it) {
         if (it->second.bookingID == bookingID) {
@@ -93,7 +89,6 @@ bool Flight::returnTicket(int bookingID) {
     return false;
 }
 
-// Generate a sequential booking ID
 int Flight::generateBookingID() {
     return bookingCounter++;
 }
