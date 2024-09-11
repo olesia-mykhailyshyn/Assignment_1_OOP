@@ -6,18 +6,59 @@
 
 using namespace std;
 
-void displayBookingInfo(const Flight& flight, int bookingID) {
-    for (const auto& [seat, booking] : flight.bookings) {
-        if (booking.bookingID == bookingID) {
-            cout << "> Flight " << flight.flight_number
-                 << ", " << flight.date
-                 << ", seat " << booking.seat
-                 << ", price " << booking.price << "$"
-                 << ", " << booking.username << endl;
-            return;
+// View bookings by Booking ID
+void viewBookingByID(const vector<Flight>& flights, int bookingID) {
+    for (const auto& flight : flights) {
+        for (const auto& [seat, booking] : flight.bookings) {
+            if (booking.bookingID == bookingID) {
+                cout << "> Flight " << flight.flight_number << ", " << flight.date
+                     << ", seat " << booking.seat
+                     << ", price $" << booking.price
+                     << ", " << booking.username << endl;
+                return;
+            }
         }
     }
     cout << "> Booking ID " << bookingID << " not found!" << endl;
+}
+
+// View bookings by Username
+void viewBookingsByUsername(const vector<Flight>& flights, const string& username) {
+    bool bookingFound = false;
+    for (const auto& flight : flights) {
+        for (const auto& [seat, booking] : flight.bookings) {
+            if (booking.username == username) {
+                cout << "> Flight " << flight.flight_number
+                     << ", " << flight.date
+                     << ", seat " << booking.seat
+                     << ", price $" << booking.price << endl;
+                bookingFound = true;
+            }
+        }
+    }
+    if (!bookingFound) {
+        cout << "> No bookings found for username: " << username << endl;
+    }
+}
+
+// View bookings for a specific flight (date and flight number)
+void viewBookingsByFlight(const vector<Flight>& flights, const string& date, const string& flightNumber) {
+    bool flightFound = false;
+    for (const auto& flight : flights) {
+        if (flight.date == date && flight.flight_number == flightNumber) {
+            flightFound = true;
+            cout << "> Bookings for Flight " << flight.flight_number << " on " << flight.date << ":" << endl;
+            for (const auto& [seat, booking] : flight.bookings) {
+                cout << "Seat: " << seat
+                     << ", Username: " << booking.username
+                     << ", Price: $" << booking.price << endl;
+            }
+            break;
+        }
+    }
+    if (!flightFound) {
+        cout << "> Flight not found for the given date and flight number." << endl;
+    }
 }
 
 int main() {
@@ -110,49 +151,31 @@ int main() {
             }
         }
         else if (command == "view") {
-            string input;
-            cout << "Enter booking ID or username: ";
-            cin >> input;
+            string option;
+            cout << "Enter 'ID', 'username', or 'flight': ";
+            cin >> option;
 
-            // Check if input is a number (assumed to be bookingID)
-            if (isdigit(input[0])) {
-                int bookingID = stoi(input);
-                bool bookingFound = false;
-                for (const auto& flight : flights) {
-                    for (const auto& [seat, booking] : flight.bookings) {
-                        if (booking.bookingID == bookingID) {
-                            displayBookingInfo(flight, bookingID);
-                            bookingFound = true;
-                            break;
-                        }
-                    }
-                    if (bookingFound) break;
-                }
-                if (!bookingFound) {
-                    cout << "> Booking ID " << bookingID << " not found!" << endl;
-                }
+            if (option == "ID") {
+                int bookingID;
+                cout << "Enter booking ID: ";
+                cin >> bookingID;
+                viewBookingByID(flights, bookingID);  // View booking by ID
             }
-                // Else treat the input as a username
-            else {
-                string username = input;
-                bool bookingFound = false;
-                for (const auto& flight : flights) {
-                    for (const auto& [seat, booking] : flight.bookings) {
-                        if (booking.username == username) {
-                            cout << "> Flight " << flight.flight_number
-                                 << ", " << flight.date
-                                 << ", seat " << booking.seat
-                                 << ", price " << booking.price << "$" << endl;
-                            bookingFound = true;
-                        }
-                    }
-                }
-                if (!bookingFound) {
-                    cout << "> No bookings found for username: " << username << endl;
-                }
+            else if (option == "username") {
+                string username;
+                cout << "Enter username: ";
+                cin >> username;
+                viewBookingsByUsername(flights, username);  // View bookings by username
+            }
+            else if (option == "flight") {
+                string date, flightNumber;
+                cout << "Enter flight date (DD.MM.YYYY): ";
+                cin >> date;
+                cout << "Enter flight number: ";
+                cin >> flightNumber;
+                viewBookingsByFlight(flights, date, flightNumber);  // View bookings by flight details
             }
         }
-
         else if (command == "exit") {
             cout << "Exiting the program." << endl;
             break;
