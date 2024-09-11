@@ -69,15 +69,12 @@ void displayFlightInfo(const Flight &flight) {
 }
 
 void displaySeats(const Flight &flight) {
-    int totalRows = flight.price_ranges.back().end_row;
-    string seats = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; // Seat letters
+    // Custom seat labels as per your request
+    string seatLabels = "A B C D E F G H I J K L M N O P";
 
-    for (int i = 0; i < flight.seats_per_row; ++i) {
-        cout << seats[i] << " ";
-    }
-    cout << endl;
+    cout << seatLabels << endl;
 
-    for (int row = 1; row <= totalRows; ++row) {
+    for (int row = 1; row <= flight.price_ranges.back().end_row; ++row) {
         cout << row << " ";
         for (int col = 0; col < flight.seats_per_row; ++col) {
             cout << "AV ";

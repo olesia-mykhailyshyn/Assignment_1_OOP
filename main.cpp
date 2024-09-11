@@ -29,26 +29,34 @@ int main() {
         return 1;
     }
 
-    string date, flightNumber;
-    cout << "Enter flight date (DD.MM.YYYY): ";
-    cin >> date;
-    cout << "Enter flight number: ";
-    cin >> flightNumber;
+    string command;
+    cout << "Enter command: ";
+    cin >> command;
 
-    bool flightFound = false;
-    for (const auto &flight : flights) {
-        if (flight.date == date && flight.flight_number == flightNumber) {
-            flightFound = true;
+    if (command == "check") {
+        string date, flightNumber;
+        cout << "Enter flight date (DD.MM.YYYY): ";
+        cin >> date;
+        cout << "Enter flight number: ";
+        cin >> flightNumber;
 
-            displayFlightInfo(flight);
+        bool flightFound = false;
+        for (const auto &flight : flights) {
+            if (flight.date == date && flight.flight_number == flightNumber) {
+                flightFound = true;
 
-            displaySeats(flight);
-            break;
+                displayFlightInfo(flight);
+
+                displaySeats(flight);
+                break;
+            }
         }
-    }
 
-    if (!flightFound) {
-        cout << "Flight not found for the given date and flight number." << endl;
+        if (!flightFound) {
+            cout << "Flight not found for the given date and flight number." << endl;
+        }
+    } else {
+        cout << "Unknown command." << endl;
     }
 
     return 0;
