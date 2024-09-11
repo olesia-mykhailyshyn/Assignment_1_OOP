@@ -16,11 +16,12 @@ struct Booking {
     string username;
     string seat;
     int bookingID;
+    int price;  // Price of the ticket
 
-    Booking() : username(""), seat(""), bookingID(0) {}
+    Booking() : username(""), seat(""), bookingID(0), price(0) {}
 
-    Booking(const string& user, const string& seatNo, int id)
-            : username(user), seat(seatNo), bookingID(id) {}
+    Booking(const string& user, const string& seatNo, int id, int seatPrice)
+            : username(user), seat(seatNo), bookingID(id), price(seatPrice) {}
 };
 
 class Flight {
@@ -37,7 +38,9 @@ public:
 
     bool bookSeat(const string& seat, const string& username);
     bool isSeatAvailable(const string& seat) const;
+    bool returnTicket(int bookingID);
     int generateBookingID();
+    int getPriceForSeat(const string& seat) const;
 };
 
 Flight parseLine(const string &line);

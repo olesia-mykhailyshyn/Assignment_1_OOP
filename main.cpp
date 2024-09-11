@@ -30,7 +30,7 @@ int main() {
 
     while (true) {
         string command;
-        cout << "\nEnter command (check/book/exit): ";
+        cout << "\nEnter command (check/book/return/exit): ";
         cin >> command;
 
         if (command == "check") {
@@ -78,12 +78,30 @@ int main() {
                 cout << "Flight not found for the given date and flight number." << endl;
             }
         }
+        else if (command == "return") {
+            int bookingID;
+            cout << "Enter booking ID: ";
+            cin >> bookingID;
+
+            bool bookingFound = false;
+            for (auto &flight : flights) {
+                if (flight.returnTicket(bookingID)) {
+                    bookingFound = true;
+                    break;  // Exit the loop if booking is found and returned
+                }
+            }
+
+            if (!bookingFound) {
+                // Ensure the "not found" message is printed only once
+                cout << "> Booking ID " << bookingID << " not found!" << endl;
+            }
+        }
         else if (command == "exit") {
             cout << "Exiting the program." << endl;
             break;
         }
         else {
-            cout << "Unknown command. Please enter 'check', 'book', or 'exit'." << endl;
+            cout << "Unknown command. Please enter 'check', 'book', 'return', or 'exit'." << endl;
         }
     }
 
