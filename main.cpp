@@ -110,26 +110,49 @@ int main() {
             }
         }
         else if (command == "view") {
-            int bookingID;
-            cout << "Enter booking ID: ";
-            cin >> bookingID;
+            string input;
+            cout << "Enter booking ID or username: ";
+            cin >> input;
 
-            bool bookingFound = false;
-            for (const auto& flight : flights) {
-                for (const auto& [seat, booking] : flight.bookings) {
-                    if (booking.bookingID == bookingID) {
-                        displayBookingInfo(flight, bookingID);
-                        bookingFound = true;
-                        break;
+            // Check if input is a number (assumed to be bookingID)
+            if (isdigit(input[0])) {
+                int bookingID = stoi(input);
+                bool bookingFound = false;
+                for (const auto& flight : flights) {
+                    for (const auto& [seat, booking] : flight.bookings) {
+                        if (booking.bookingID == bookingID) {
+                            displayBookingInfo(flight, bookingID);
+                            bookingFound = true;
+                            break;
+                        }
+                    }
+                    if (bookingFound) break;
+                }
+                if (!bookingFound) {
+                    cout << "> Booking ID " << bookingID << " not found!" << endl;
+                }
+            }
+                // Else treat the input as a username
+            else {
+                string username = input;
+                bool bookingFound = false;
+                for (const auto& flight : flights) {
+                    for (const auto& [seat, booking] : flight.bookings) {
+                        if (booking.username == username) {
+                            cout << "> Flight " << flight.flight_number
+                                 << ", " << flight.date
+                                 << ", seat " << booking.seat
+                                 << ", price " << booking.price << "$" << endl;
+                            bookingFound = true;
+                        }
                     }
                 }
-                if (bookingFound) break;
-            }
-
-            if (!bookingFound) {
-                cout << "> Booking ID " << bookingID << " not found!" << endl;
+                if (!bookingFound) {
+                    cout << "> No bookings found for username: " << username << endl;
+                }
             }
         }
+
         else if (command == "exit") {
             cout << "Exiting the program." << endl;
             break;
