@@ -76,7 +76,7 @@ void Airplane::displaySeats() const {
             if (isSeatAvailable(seat)) {
                 cout << "AV ";
             } else {
-                cout << "A ";
+                cout << "X ";
             }
         }
         cout << endl;
