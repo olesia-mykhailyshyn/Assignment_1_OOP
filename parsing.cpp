@@ -5,6 +5,8 @@
 
 using namespace std;
 
+int Flight::bookingCounter = 1;
+
 Flight parseLine(const string &line) {
     Flight flight;
     smatch match;
@@ -49,6 +51,25 @@ vector<Flight> parseData(const string &data) {
     return flights;
 }
 
+bool Flight::isSeatAvailable(const string& seat) const {
+    return bookings.find(seat) == bookings.end();
+}
+
+bool Flight::bookSeat(const string& seat, const string& username) {
+    if (isSeatAvailable(seat)) {
+        int bookingID = generateBookingID();
+        bookings[seat] = Booking(username, seat, bookingID);
+        cout << "> Confirmed with ID: " << bookingID << endl;
+        return true;
+    }
+    cout << "> Seat " << seat << " is already booked!" << endl;
+    return false;
+}
+
+int Flight::generateBookingID() {
+    return bookingCounter++;
+}
+
 void displayFlightInfo(const Flight &flight) {
     cout << "Date: " << flight.date << endl;
     cout << "Flight Number: " << flight.flight_number << endl;
@@ -69,15 +90,19 @@ void displayFlightInfo(const Flight &flight) {
 }
 
 void displaySeats(const Flight &flight) {
-    // Custom seat labels as per your request
-    string seatLabels = "A B C D E F G H I J K L M N O P";
+    string seatLabels = "A B C D E F G H";
 
     cout << seatLabels << endl;
 
     for (int row = 1; row <= flight.price_ranges.back().end_row; ++row) {
         cout << row << " ";
         for (int col = 0; col < flight.seats_per_row; ++col) {
-            cout << "AV ";
+            string seat = to_string(row) + seatLabels[col * 2];
+            if (flight.isSeatAvailable(seat)) {
+                cout << "AV ";
+            } else {
+                cout << "X ";
+            }
         }
         cout << endl;
     }
