@@ -5,13 +5,13 @@ using namespace std;
 
 void BookingManager::view(int bookingID) const {
     for (const auto& flight : flights) {
-        for (const auto& [seat, booking] : flight.bookings) {
-            if (booking.bookingID == bookingID) {
-                cout << "Flight " << flight.flight_number
-                     << ", " << flight.date
-                     << ", seat " << booking.seat
-                     << ", price $" << booking.price
-                     << ", " << booking.username << endl;
+        for (const auto& [seat, booking] : flight.getBookings()) {
+            if (booking.getBookingID() == bookingID) {
+                cout << "Flight " << flight.getFlightNumber()
+                     << ", " << flight.getDate()
+                     << ", seat " << booking.getSeat()
+                     << ", price $" << booking.getPrice()
+                     << ", " << booking.getUsername() << endl;
                 return;
             }
         }
@@ -19,16 +19,16 @@ void BookingManager::view(int bookingID) const {
     cout << "Booking ID " << bookingID << " not found!" << endl;
 }
 
-
 void BookingManager::view(const string& username) const {
     bool bookingFound = false;
     int counter = 1;
     for (const auto& flight : flights) {
-        for (const auto& [seat, booking] : flight.bookings) {
-            if (booking.username == username) {
-                cout << counter << ". Flight " << flight.flight_number << ", "
-                     << flight.date << ", seat " << booking.seat
-                     << ", price $" << booking.price << endl;
+        for (const auto& [seat, booking] : flight.getBookings()) {
+            if (booking.getUsername() == username) {
+                cout << counter << ". Flight " << flight.getFlightNumber()
+                     << ", " << flight.getDate()
+                     << ", seat " << booking.getSeat()
+                     << ", price $" << booking.getPrice() << endl;
                 bookingFound = true;
                 ++counter;
             }
@@ -39,15 +39,20 @@ void BookingManager::view(const string& username) const {
     }
 }
 
-
 void BookingManager::view(const string& date, const string& flightNumber) const {
     bool flightFound = false;
     for (const auto& flight : flights) {
-        if (flight.date == date && flight.flight_number == flightNumber) {
+        if (flight.getDate() == date && flight.getFlightNumber() == flightNumber) {
             flightFound = true;
-            cout << "Bookings for Flight " << flight.flight_number << " on " << flight.date << ":" << endl;
-            for (const auto& [seat, booking] : flight.bookings) {
-                cout << seat << " " << booking.username << " $" << booking.price << endl;
+            const auto& bookings = flight.getBookings();
+            if (bookings.empty()) {
+                cout << "No bookings found for flight " << flightNumber << " on " << date << endl;
+                return;
+            }
+
+            cout << "Bookings for Flight " << flight.getFlightNumber() << " on " << flight.getDate() << ":" << endl;
+            for (const auto& [seat, booking] : bookings) {
+                cout << seat << " " << booking.getUsername() << " $" << booking.getPrice() << endl;
             }
             return;
         }
@@ -56,4 +61,3 @@ void BookingManager::view(const string& date, const string& flightNumber) const 
         cout << "Flight not found for the given date and flight number." << endl;
     }
 }
-

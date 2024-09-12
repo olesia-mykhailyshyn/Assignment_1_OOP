@@ -1,5 +1,4 @@
 #include "Airplane.h"
-#include "BookingManager.h"
 #include <iostream>
 
 int Airplane::bookingCounter = 1;
@@ -20,42 +19,48 @@ int Airplane::getPriceForSeat(const string& seat) const {
 
 bool Airplane::bookSeat(const string& seat, const string& username) {
     if (seat.size() < 2 || !isdigit(seat[0])) {
-        cout << "Invalid seat format!" << endl;
+        cout << "Invalid seat format! Seat should be in the format '1A'." << endl;
         return false;
     }
 
     int row = stoi(seat.substr(0, seat.size() - 1));
     char seatLetter = seat.back();
 
-    if (row > price_ranges.back().end_row || (seatLetter - 'A') >= seats_per_row) {
-        cout << "Invalid seat " << seat << "!" << endl;
+    if (row > price_ranges.back().end_row || row < price_ranges.front().start_row) {
+        cout << "Invalid row number " << row << "!" << endl;
         return false;
     }
 
-    if (isSeatAvailable(seat)) {
-        int bookingID = generateBookingID();
-        int seatPrice = getPriceForSeat(seat);
-        bookings[seat] = Ticket(username, seat, bookingID, seatPrice);
-        cout << "Confirmed with ID: " << bookingID << endl;
-        return true;
+    if ((seatLetter - 'A') >= seats_per_row) {
+        cout << "Invalid seat letter " << seatLetter << "!" << endl;
+        return false;
     }
 
-    cout << "Seat " << seat << " is already booked!" << endl;
-    return false;
+    if (!isSeatAvailable(seat)) {
+        cout << "Seat " << seat << " is already booked!" << endl;
+        return false;
+    }
+
+    int bookingID = generateBookingID();
+    int seatPrice = getPriceForSeat(seat);
+    bookings[seat] = Ticket(username, seat, bookingID, seatPrice);
+    cout << "Booking confirmed with ID: " << bookingID << endl;
+    return true;
 }
 
 
 bool Airplane::returnTicket(int bookingID) {
     for (auto it = bookings.begin(); it != bookings.end(); ++it) {
-        if (it->second.bookingID == bookingID) {
-            cout << "Confirmed $" << it->second.price << " refund for " << it->second.username << endl;
+        if (it->second.getBookingID() == bookingID) {
+            cout << "Confirmed $" << it->second.getPrice()
+                 << " refund for " << it->second.getUsername() << endl;
             bookings.erase(it);
             return true;
         }
     }
+    cout << "Booking ID " << bookingID << " not found!" << endl;
     return false;
 }
-
 
 int Airplane::generateBookingID() {
     return bookingCounter++;

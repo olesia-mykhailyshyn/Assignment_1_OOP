@@ -13,7 +13,7 @@ struct PriceRange {
 };
 
 class Airplane {
-public:
+private:
     string date;
     string flight_number;
     int seats_per_row{};
@@ -22,7 +22,17 @@ public:
 
     static int bookingCounter;
 
+public:
     Airplane() = default;
+
+    string getDate() const { return date; }
+    string getFlightNumber() const { return flight_number; }
+    const map<string, Ticket>& getBookings() const { return bookings; }
+
+    void setDate(const string& d) { date = d; }
+    void setFlightNumber(const string& fn) { flight_number = fn; }
+    void setSeatsPerRow(int spr) { seats_per_row = spr; }
+    void setPriceRanges(const vector<PriceRange>& ranges) { price_ranges = ranges; }
 
     bool bookSeat(const string& seat, const string& username);
     bool isSeatAvailable(const string& seat) const;
