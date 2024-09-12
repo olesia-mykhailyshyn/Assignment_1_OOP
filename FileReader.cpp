@@ -41,7 +41,7 @@ vector<Airplane> FileReader::parseData(const string& filename) {
                 string::const_iterator search_start(prices.cbegin());
 
                 while (regex_search(search_start, prices.cend(), price_match, price_pattern)) {
-                    PriceRange pr;
+                    PriceRange pr{};
                     pr.start_row = stoi(price_match[1]);
                     pr.end_row = stoi(price_match[2]);
                     pr.price = stoi(price_match[3]);

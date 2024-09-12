@@ -2,14 +2,15 @@
 #include <vector>
 #include "Airplane.h"
 
+using namespace std;
+
 class BookingManager {
 public:
-    BookingManager(const std::vector<Airplane>& flights) : flights(flights) {}
-
+    explicit BookingManager(const vector<Airplane>& flights) : flights(flights) {}
     void viewBookingByID(int bookingID) const;
-    void viewBookingsByUsername(const std::string& username) const;
-    void viewBookingsByFlight(const std::string& date, const std::string& flightNumber) const;
+    void viewBookingsByUsername(const string& username) const;
+    void viewBookingsByFlight(const string& date, const string& flightNumber) const;
 
 private:
-    std::vector<Airplane> flights;
+    vector<Airplane> flights;
 };

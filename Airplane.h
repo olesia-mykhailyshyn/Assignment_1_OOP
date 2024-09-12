@@ -16,7 +16,7 @@ class Airplane {
 public:
     string date;
     string flight_number;
-    int seats_per_row;
+    int seats_per_row{};
     vector<PriceRange> price_ranges;
     map<string, Ticket> bookings;
 
@@ -27,7 +27,7 @@ public:
     bool bookSeat(const string& seat, const string& username);
     bool isSeatAvailable(const string& seat) const;
     bool returnTicket(int bookingID);
-    int generateBookingID();
+    static int generateBookingID();
     int getPriceForSeat(const string& seat) const;
     void displaySeats() const;
     void displayFlightInfo() const;

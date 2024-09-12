@@ -33,7 +33,7 @@ bool Airplane::returnTicket(int bookingID) {
     for (auto it = bookings.begin(); it != bookings.end(); ++it) {
         if (it->second.bookingID == bookingID) {
             cout << "> Confirmed $" << it->second.price << " refund for " << it->second.username << endl;
-            bookings.erase(it);  // Remove the booking
+            bookings.erase(it);
             return true;
         }
     }

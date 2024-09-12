@@ -7,10 +7,8 @@ void BookingManager::viewBookingByID(int bookingID) const {
     for (const auto& flight : flights) {
         for (const auto& [seat, booking] : flight.bookings) {
             if (booking.bookingID == bookingID) {
-                cout << "> Flight " << flight.flight_number << ", " << flight.date
-                          << ", seat " << booking.seat
-                          << ", price $" << booking.price
-                          << ", " << booking.username << endl;
+                cout << "> Flight " << flight.flight_number << ", " << flight.date << ", seat " << booking.seat
+                << ", price $" << booking.price << ", " << booking.username << endl;
                 return;
             }
         }
@@ -23,9 +21,7 @@ void BookingManager::viewBookingsByUsername(const string& username) const {
     for (const auto& flight : flights) {
         for (const auto& [seat, booking] : flight.bookings) {
             if (booking.username == username) {
-                cout << "> Flight " << flight.flight_number
-                          << ", " << flight.date
-                          << ", seat " << booking.seat
+                cout << "> Flight " << flight.flight_number << ", " << flight.date << ", seat " << booking.seat
                           << ", price $" << booking.price << endl;
                 bookingFound = true;
             }
@@ -43,8 +39,7 @@ void BookingManager::viewBookingsByFlight(const string& date, const string& flig
             flightFound = true;
             cout << "> Bookings for Flight " << flight.flight_number << " on " << flight.date << ":" << endl;
             for (const auto& [seat, booking] : flight.bookings) {
-                cout << "Seat: " << seat
-                          << ", Username: " << booking.username
+                cout << "Seat: " << seat << ", Username: " << booking.username
                           << ", Price: $" << booking.price << endl;
             }
             break;

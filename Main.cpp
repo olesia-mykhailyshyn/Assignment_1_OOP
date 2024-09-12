@@ -7,7 +7,7 @@
 using namespace std;
 
 int main() {
-    vector<Airplane> flights = FileReader::parseData("C:\\KSE\\OOP_design\\Assignment_1\\configFile.txt");
+    vector<Airplane> flights = FileReader::parseData(R"(C:\KSE\OOP_design\Assignment_1\configFile.txt)");
 
     if (flights.empty()) {
         cerr << "No flight data loaded. Exiting." << endl;
