@@ -92,26 +92,26 @@ int main() {
         }
         else if (command == "view") {
             string option;
-            cout << "Enter 'ID', 'username', or 'flight': ";
+            cout << "Enter 'ID', 'username', or 'flight': " << endl;
             cin >> option;
 
             if (option == "ID") {
                 int bookingID;
-                cout << "Enter booking ID: ";
+                cout << "Enter booking ID: " << endl;
                 cin >> bookingID;
-                bookingManager.viewBookingByID(bookingID);
+                bookingManager.view(bookingID);
             } else if (option == "username") {
                 string username;
-                cout << "Enter username: ";
+                cout << "Enter username: " << endl;
                 cin >> username;
-                bookingManager.viewBookingsByUsername(username);
+                bookingManager.view(username);
             } else if (option == "flight") {
                 string date, flightNumber;
-                cout << "Enter flight date (DD.MM.YYYY): ";
+                cout << "Enter flight date (DD.MM.YYYY): " << endl;
                 cin >> date;
-                cout << "Enter flight number: ";
+                cout << "Enter flight number: " << endl;
                 cin >> flightNumber;
-                bookingManager.viewBookingsByFlight(date, flightNumber);
+                bookingManager.view(date, flightNumber);
             } else {
                 cout << "Unknown option. Please enter 'ID', 'username', or 'flight'." << endl;
             }

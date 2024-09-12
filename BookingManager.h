@@ -6,11 +6,15 @@ using namespace std;
 
 class BookingManager {
 public:
-    explicit BookingManager(const vector<Airplane>& flights) : flights(flights) {}
-    void viewBookingByID(int bookingID) const;
-    void viewBookingsByUsername(const string& username) const;
-    void viewBookingsByFlight(const string& date, const string& flightNumber) const;
+    explicit BookingManager(vector<Airplane>& flights) : flights(flights) {}
+
+    // View methods based on different criteria
+    void view(int bookingID) const;
+    void view(const string& username) const;
+    void view(const string& date, const string& flightNumber) const;
+
+    static int nextBookingID;
 
 private:
-    vector<Airplane> flights;
+    vector<Airplane>& flights;
 };
