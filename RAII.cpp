@@ -12,7 +12,7 @@ FileRAII::FileRAII(const wstring& filePath, uint32_t access, uint32_t creationDi
                         FILE_ATTRIBUTE_NORMAL,
                         nullptr);
     if (hFile == INVALID_HANDLE_VALUE) {
-        throw runtime_error("Failed to open file.");
+        throw runtime_error("Failed to open file: " + string(filePath.begin(), filePath.end()));
     }
 }
 

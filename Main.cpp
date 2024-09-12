@@ -1,10 +1,21 @@
 #include <iostream>
 #include <vector>
+#include <regex>
 #include "FileReader.h"
 #include "Airplane.h"
 #include "BookingManager.h"
 
 using namespace std;
+
+bool isValidDate(const string& date) {
+    regex datePattern(R"(\d{2}\.\d{2}\.\d{4})");
+    return regex_match(date, datePattern);
+}
+
+bool isValidSeat(const string& seat) {
+    regex seatPattern(R"(\d+[A-Z])");
+    return regex_match(seat, seatPattern);
+}
 
 int main() {
     vector<Airplane> flights = FileReader::parseData(R"(C:\KSE\OOP_design\Assignment_1\configFile.txt)");
@@ -28,6 +39,11 @@ int main() {
             cout << "Enter flight number: " << endl;
             cin >> flightNumber;
 
+            if (!isValidDate(date)) {
+                cout << "Invalid date format. Please use DD.MM.YYYY." << endl;
+                continue;
+            }
+
             bool flightFound = false;
             for (const auto& flight : flights) {
                 if (flight.getDate() == date && flight.getFlightNumber() == flightNumber) {
@@ -41,17 +57,25 @@ int main() {
             if (!flightFound) {
                 cout << "Flight not found for the given date and flight number." << endl;
             }
-        } if (command == "book") {
+        } else if (command == "book") {
             string date, flightNumber, seat, username;
 
             cout << "Enter flight date (DD.MM.YYYY): " << endl;
             cin >> date;
+            if (!isValidDate(date)) {
+                cout << "Invalid date format. Please use DD.MM.YYYY." << endl;
+                continue;
+            }
 
             cout << "Enter flight number: " << endl;
             cin >> flightNumber;
 
             cout << "Enter seat (e.g., 1A): " << endl;
             cin >> seat;
+            if (!isValidSeat(seat)) {
+                cout << "Invalid seat format. Please use a valid seat (e.g., 1A)." << endl;
+                continue;
+            }
 
             cout << "Enter your username: " << endl;
             cin >> username;
@@ -61,12 +85,8 @@ int main() {
                 if (flight.getDate() == date && flight.getFlightNumber() == flightNumber) {
                     flightFound = true;
 
-                    if (flight.isSeatAvailable(seat)) {
-                        if (!flight.bookSeat(seat, username)) {
-                            cout << "Failed to book seat " << seat << "." << endl;
-                        }
-                    } else {
-                        cout << "Seat " << seat << " is unavailable." << endl;
+                    if (!flight.bookSeat(seat, username)) {
+                        cout << "Failed to book seat " << seat << "." << endl;
                     }
                     break;
                 }
@@ -75,8 +95,7 @@ int main() {
             if (!flightFound) {
                 cout << "Flight not found for the given date and flight number." << endl;
             }
-        }
-        else if (command == "return") {
+        } else if (command == "return") {
             int bookingID;
             cout << "Enter booking ID: " << endl;
             cin >> bookingID;
@@ -113,6 +132,12 @@ int main() {
                 cin >> date;
                 cout << "Enter flight number: " << endl;
                 cin >> flightNumber;
+
+                if (!isValidDate(date)) {
+                    cout << "Invalid date format. Please use DD.MM.YYYY." << endl;
+                    continue;
+                }
+
                 bookingManager.view(date, flightNumber);
             } else {
                 cout << "Unknown option. Please enter 'ID', 'username', or 'flight'." << endl;

@@ -19,35 +19,39 @@ int Airplane::getPriceForSeat(const string& seat) const {
 
 bool Airplane::bookSeat(const string& seat, const string& username) {
     if (seat.size() < 2 || !isdigit(seat[0])) {
-        cout << "Invalid seat format! Seat should be in the format '1A'." << endl;
+        cout << "Error: Invalid seat format! Seat should be in the format '1A'." << endl;
         return false;
     }
 
     int row = stoi(seat.substr(0, seat.size() - 1));
     char seatLetter = seat.back();
 
-    if (row > price_ranges.back().end_row || row < price_ranges.front().start_row) {
-        cout << "Invalid row number " << row << "!" << endl;
+    if (row < price_ranges.front().start_row || row > price_ranges.back().end_row) {
+        cout << "Error: Row " << row << " is out of bounds!" << endl;
         return false;
     }
 
     if ((seatLetter - 'A') >= seats_per_row) {
-        cout << "Invalid seat letter " << seatLetter << "!" << endl;
+        cout << "Error: Seat letter " << seatLetter << " is invalid!" << endl;
         return false;
     }
 
     if (!isSeatAvailable(seat)) {
-        cout << "Seat " << seat << " is already booked!" << endl;
+        cout << "Error: Seat " << seat << " is already booked!" << endl;
         return false;
     }
 
     int bookingID = generateBookingID();
     int seatPrice = getPriceForSeat(seat);
+    if (seatPrice <= 0) {
+        cout << "Error: Invalid price for seat " << seat << "!" << endl;
+        return false;
+    }
+
     bookings[seat] = Ticket(username, seat, bookingID, seatPrice);
     cout << "Booking confirmed with ID: " << bookingID << endl;
     return true;
 }
-
 
 bool Airplane::returnTicket(int bookingID) {
     for (auto it = bookings.begin(); it != bookings.end(); ++it) {
@@ -58,7 +62,7 @@ bool Airplane::returnTicket(int bookingID) {
             return true;
         }
     }
-    cout << "Booking ID " << bookingID << " not found!" << endl;
+    cout << "Error: Booking ID " << bookingID << " not found!" << endl;
     return false;
 }
 
