@@ -18,14 +18,14 @@ int main() {
 
     while (true) {
         string command;
-        cout << "\nEnter command (check/book/return/view/exit): ";
+        cout << "\nEnter command (check/book/return/view/exit): " << endl;
         cin >> command;
 
         if (command == "check") {
             string date, flightNumber;
-            cout << "Enter flight date (DD.MM.YYYY): ";
+            cout << "Enter flight date (DD.MM.YYYY): "  << endl;
             cin >> date;
-            cout << "Enter flight number: ";
+            cout << "Enter flight number: " << endl;
             cin >> flightNumber;
 
             bool flightFound = false;
@@ -43,20 +43,26 @@ int main() {
             }
         } else if (command == "book") {
             string date, flightNumber, seat, username;
-            cout << "Enter flight date (DD.MM.YYYY): ";
+
+            cout << "Enter flight date (DD.MM.YYYY): " << endl;
             cin >> date;
-            cout << "Enter flight number: ";
+
+            cout << "Enter flight number: " << endl;
             cin >> flightNumber;
-            cout << "Enter seat (e.g., 1A): ";
+
+            cout << "Enter seat (e.g., 1A): " << endl;
             cin >> seat;
-            cout << "Enter your username: ";
+
+            cout << "Enter your username: " << endl;
             cin >> username;
 
             bool flightFound = false;
             for (auto& flight : flights) {
                 if (flight.date == date && flight.flight_number == flightNumber) {
                     flightFound = true;
-                    flight.bookSeat(seat, username);
+                    if (!flight.bookSeat(seat, username)) {
+                        cout << "Failed to book seat " << seat << "." << endl;
+                    }
                     break;
                 }
             }
@@ -64,9 +70,12 @@ int main() {
             if (!flightFound) {
                 cout << "Flight not found for the given date and flight number." << endl;
             }
-        } else if (command == "return") {
+        }
+
+
+        else if (command == "return") {
             int bookingID;
-            cout << "Enter booking ID: ";
+            cout << "Enter booking ID: " << endl;
             cin >> bookingID;
 
             bool bookingFound = false;
@@ -78,9 +87,10 @@ int main() {
             }
 
             if (!bookingFound) {
-                cout << "> Booking ID " << bookingID << " not found!" << endl;
+                cout << "Booking ID " << bookingID << " not found!" << endl;
             }
-        } else if (command == "view") {
+        }
+        else if (command == "view") {
             string option;
             cout << "Enter 'ID', 'username', or 'flight': ";
             cin >> option;
@@ -102,8 +112,12 @@ int main() {
                 cout << "Enter flight number: ";
                 cin >> flightNumber;
                 bookingManager.viewBookingsByFlight(date, flightNumber);
+            } else {
+                cout << "Unknown option. Please enter 'ID', 'username', or 'flight'." << endl;
             }
-        } else if (command == "exit") {
+        }
+
+        else if (command == "exit") {
             cout << "Exiting the program." << endl;
             break;
         } else {

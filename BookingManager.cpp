@@ -7,28 +7,34 @@ void BookingManager::viewBookingByID(int bookingID) const {
     for (const auto& flight : flights) {
         for (const auto& [seat, booking] : flight.bookings) {
             if (booking.bookingID == bookingID) {
-                cout << "> Flight " << flight.flight_number << ", " << flight.date << ", seat " << booking.seat
-                << ", price $" << booking.price << ", " << booking.username << endl;
+                cout << "Flight " << flight.flight_number
+                     << ", " << flight.date
+                     << ", seat " << booking.seat
+                     << ", price $" << booking.price
+                     << ", " << booking.username << endl;
                 return;
             }
         }
     }
-    cout << "> Booking ID " << bookingID << " not found!" << endl;
+    cout << "Booking ID " << bookingID << " not found!" << endl;
 }
+
 
 void BookingManager::viewBookingsByUsername(const string& username) const {
     bool bookingFound = false;
+    int counter = 1;
     for (const auto& flight : flights) {
         for (const auto& [seat, booking] : flight.bookings) {
             if (booking.username == username) {
-                cout << "> Flight " << flight.flight_number << ", " << flight.date << ", seat " << booking.seat
-                          << ", price $" << booking.price << endl;
+                cout << counter << ". Flight " << flight.flight_number << ", " << flight.date
+                     << ", seat " << booking.seat << ", price $" << booking.price << endl;
                 bookingFound = true;
+                ++counter;
             }
         }
     }
     if (!bookingFound) {
-        cout << "> No bookings found for username: " << username << endl;
+        cout << "No bookings found for username: " << username << endl;
     }
 }
 
@@ -37,15 +43,14 @@ void BookingManager::viewBookingsByFlight(const string& date, const string& flig
     for (const auto& flight : flights) {
         if (flight.date == date && flight.flight_number == flightNumber) {
             flightFound = true;
-            cout << "> Bookings for Flight " << flight.flight_number << " on " << flight.date << ":" << endl;
+            cout << "Bookings for Flight " << flight.flight_number << " on " << flight.date << ":" << endl;
             for (const auto& [seat, booking] : flight.bookings) {
-                cout << "Seat: " << seat << ", Username: " << booking.username
-                          << ", Price: $" << booking.price << endl;
+                cout << seat << " " << booking.username << " $" << booking.price << endl;
             }
-            break;
+            return;
         }
     }
     if (!flightFound) {
-        cout << "> Flight not found for the given date and flight number." << endl;
+        cout << "Flight not found for the given date and flight number." << endl;
     }
 }

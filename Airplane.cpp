@@ -18,28 +18,43 @@ int Airplane::getPriceForSeat(const string& seat) const {
 }
 
 bool Airplane::bookSeat(const string& seat, const string& username) {
+    if (seat.size() < 2 || !isdigit(seat[0])) {
+        cout << "Invalid seat format!" << endl;
+        return false;
+    }
+
+    int row = stoi(seat.substr(0, seat.size() - 1));
+    char seatLetter = seat.back();
+
+    if (row > price_ranges.back().end_row || (seatLetter - 'A') >= seats_per_row) {
+        cout << "Invalid seat " << seat << "!" << endl;
+        return false;
+    }
+
     if (isSeatAvailable(seat)) {
         int bookingID = generateBookingID();
         int seatPrice = getPriceForSeat(seat);
         bookings[seat] = Ticket(username, seat, bookingID, seatPrice);
-        cout << "> Confirmed with ID: " << bookingID << endl;
+        cout << "Confirmed with ID: " << bookingID << endl;
         return true;
     }
-    cout << "> Seat " << seat << " is already booked!" << endl;
+
+    cout << "Seat " << seat << " is already booked!" << endl;
     return false;
 }
+
 
 bool Airplane::returnTicket(int bookingID) {
     for (auto it = bookings.begin(); it != bookings.end(); ++it) {
         if (it->second.bookingID == bookingID) {
-            cout << "> Confirmed $" << it->second.price << " refund for " << it->second.username << endl;
+            cout << "Confirmed $" << it->second.price << " refund for " << it->second.username << endl;
             bookings.erase(it);
             return true;
         }
     }
-    cout << "> Booking ID " << bookingID << " not found!" << endl;
     return false;
 }
+
 
 int Airplane::generateBookingID() {
     return bookingCounter++;
@@ -65,16 +80,24 @@ void Airplane::displayFlightInfo() const {
 }
 
 void Airplane::displaySeats() const {
-    string seatLabels = "A B C D E F G H";
+    string seatLabels = "   ";
+    for (int i = 0; i < seats_per_row; ++i) {
+        seatLabels += static_cast<char>('A' + i);
+        if (i < seats_per_row - 1) seatLabels += " ";
+    }
 
     cout << seatLabels << endl;
 
     for (int row = 1; row <= price_ranges.back().end_row; ++row) {
+        if (row < 10) {
+            cout << " ";
+        }
         cout << row << " ";
+
         for (int col = 0; col < seats_per_row; ++col) {
-            string seat = to_string(row) + seatLabels[col * 2];
+            string seat = to_string(row) + static_cast<char>('A' + col);
             if (isSeatAvailable(seat)) {
-                cout << "AV ";
+                cout << "1 ";
             } else {
                 cout << "X ";
             }

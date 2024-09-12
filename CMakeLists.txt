@@ -8,4 +8,4 @@ add_executable(Assignment_1
         Airplane.cpp
         BookingManager.cpp
         FileReader.cpp
-        RAI.cpp)
+        RAII.cpp)
