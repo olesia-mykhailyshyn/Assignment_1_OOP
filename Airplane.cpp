@@ -9,8 +9,8 @@ bool Airplane::isSeatAvailable(const string& seat) const {
 
 int Airplane::getPriceForSeat(const string& seat) const {
     int row = stoi(seat.substr(0, seat.size() - 1));
-    for (const auto& priceRange : price_ranges) {
-        if (row >= priceRange.start_row && row <= priceRange.end_row) {
+    for (const auto& priceRange : priceRanges) {
+        if (row >= priceRange.startRow && row <= priceRange.endRow) {
             return priceRange.price;
         }
     }
@@ -26,12 +26,12 @@ bool Airplane::bookSeat(const string& seat, const string& username) {
     int row = stoi(seat.substr(0, seat.size() - 1));
     char seatLetter = seat.back();
 
-    if (row < price_ranges.front().start_row || row > price_ranges.back().end_row) {
+    if (row < priceRanges.front().startRow || row > priceRanges.back().endRow) {
         cout << "Error: Row " << row << " is out of bounds!" << endl;
         return false;
     }
 
-    if ((seatLetter - 'A') >= seats_per_row) {
+    if ((seatLetter - 'A') >= seatsPerRow) {
         cout << "Error: Seat letter " << seatLetter << " is invalid!" << endl;
         return false;
     }
@@ -62,7 +62,6 @@ bool Airplane::returnTicket(int bookingID) {
             return true;
         }
     }
-    cout << "Error: Booking ID " << bookingID << " not found!" << endl;
     return false;
 }
 
@@ -72,39 +71,39 @@ int Airplane::generateBookingID() {
 
 void Airplane::displayFlightInfo() const {
     cout << "Date: " << date << endl;
-    cout << "Flight Number: " << flight_number << endl;
-    cout << "Seats per row: " << seats_per_row << endl;
+    cout << "Flight Number: " << flightNumber << endl;
+    cout << "Seats per row: " << seatsPerRow << endl;
 
     cout << "Price per row range:" << endl;
-    for (const auto &priceRange : price_ranges) {
-        cout << "  Rows " << priceRange.start_row << "-" << priceRange.end_row
+    for (const auto &priceRange : priceRanges) {
+        cout << "  Rows " << priceRange.startRow << "-" << priceRange.endRow
              << ": $" << priceRange.price << endl;
     }
 
-    int totalRows = price_ranges.back().end_row;
+    int totalRows = priceRanges.back().endRow;
     cout << "Total number of rows: " << totalRows << endl;
 
-    int totalSeats = totalRows * seats_per_row;
+    int totalSeats = totalRows * seatsPerRow;
     cout << "Total number of seats: " << totalSeats << endl;
     cout << "--------------------------" << endl;
 }
 
 void Airplane::displaySeats() const {
     string seatLabels = "   ";
-    for (int i = 0; i < seats_per_row; ++i) {
+    for (int i = 0; i < seatsPerRow; ++i) {
         seatLabels += static_cast<char>('A' + i);
-        if (i < seats_per_row - 1) seatLabels += " ";
+        if (i < seatsPerRow - 1) seatLabels += " ";
     }
 
     cout << seatLabels << endl;
 
-    for (int row = 1; row <= price_ranges.back().end_row; ++row) {
+    for (int row = 1; row <= priceRanges.back().endRow; ++row) {
         if (row < 10) {
             cout << " ";
         }
         cout << row << " ";
 
-        for (int col = 0; col < seats_per_row; ++col) {
+        for (int col = 0; col < seatsPerRow; ++col) {
             string seat = to_string(row) + static_cast<char>('A' + col);
             if (isSeatAvailable(seat)) {
                 cout << "1 ";

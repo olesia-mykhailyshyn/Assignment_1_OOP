@@ -48,8 +48,8 @@ vector<Airplane> FileReader::parseData(const string& filename) {
                 vector<PriceRange> price_ranges;
                 while (regex_search(search_start, prices.cend(), price_match, price_pattern)) {
                     PriceRange pr{};
-                    pr.start_row = stoi(price_match[1]);
-                    pr.end_row = stoi(price_match[2]);
+                    pr.startRow = stoi(price_match[1]);
+                    pr.endRow = stoi(price_match[2]);
                     pr.price = stoi(price_match[3]);
                     price_ranges.push_back(pr);
 
@@ -60,13 +60,7 @@ vector<Airplane> FileReader::parseData(const string& filename) {
                 flights.push_back(flight);
             } else {
                 cerr << "Failed to parse line: " << line << endl;
-                if (line.find("  ") != string::npos) {
-                    cerr << "Error: Extra spaces detected in the line." << endl;
-                } else if (line.find("$") == string::npos) {
-                    cerr << "Error: Missing price format ($) in the line." << endl;
-                } else if (line.size() < 20) {
-                    cerr << "Error: Line is too short and may be incomplete." << endl;
-                }
+                cerr << "Error: Extra spaces detected in the line." << endl;
             }
         }
     } catch (const exception& e) {

@@ -7,17 +7,17 @@
 using namespace std;
 
 struct PriceRange {
-    int start_row;
-    int end_row;
+    int startRow;
+    int endRow;
     int price;
 };
 
 class Airplane {
 private:
     string date;
-    string flight_number;
-    int seats_per_row{};
-    vector<PriceRange> price_ranges;
+    string flightNumber;
+    int seatsPerRow{};
+    vector<PriceRange> priceRanges;
     unordered_map<string, Ticket> bookings;
 
     static int bookingCounter;
@@ -26,13 +26,13 @@ public:
     Airplane() = default;
 
     string getDate() const { return date; }
-    string getFlightNumber() const { return flight_number; }
+    string getFlightNumber() const { return flightNumber; }
     const unordered_map<string, Ticket>& getBookings() const { return bookings; }
 
     void setDate(const string& d) { date = d; }
-    void setFlightNumber(const string& fn) { flight_number = fn; }
-    void setSeatsPerRow(int spr) { seats_per_row = spr; }
-    void setPriceRanges(const vector<PriceRange>& ranges) { price_ranges = ranges; }
+    void setFlightNumber(const string& fn) { flightNumber = fn; }
+    void setSeatsPerRow(int spr) { seatsPerRow = spr; }
+    void setPriceRanges(const vector<PriceRange>& ranges) { priceRanges = ranges; }
 
     bool bookSeat(const string& seat, const string& username);
     bool isSeatAvailable(const string& seat) const;
