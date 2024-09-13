@@ -62,7 +62,7 @@ int main() {
             }
 
             if (!flightFound) {
-                cout << "Flight not found for the given date and flight number." << endl;
+                cout << "Flight not found for the given date and flight number; or there is a problem related to parsing line." << endl;
             }
         } else if (command == "book") {
             string date, flightNumber, seat, username;
@@ -100,7 +100,7 @@ int main() {
             }
 
             if (!flightFound) {
-                cout << "Flight not found for the given date and flight number." << endl;
+                cout << "Flight not found for the given date and flight number; or there is a problem related to parsing line." << endl;
             }
         } else if (command == "return") {
             int bookingID;
