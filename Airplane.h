@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
-#include <map>
+#include <unordered_map>
 #include "Ticket.h"
 
 using namespace std;
@@ -18,7 +18,7 @@ private:
     string flight_number;
     int seats_per_row{};
     vector<PriceRange> price_ranges;
-    map<string, Ticket> bookings;
+    unordered_map<string, Ticket> bookings;
 
     static int bookingCounter;
 
@@ -27,7 +27,7 @@ public:
 
     string getDate() const { return date; }
     string getFlightNumber() const { return flight_number; }
-    const map<string, Ticket>& getBookings() const { return bookings; }
+    const unordered_map<string, Ticket>& getBookings() const { return bookings; }
 
     void setDate(const string& d) { date = d; }
     void setFlightNumber(const string& fn) { flight_number = fn; }

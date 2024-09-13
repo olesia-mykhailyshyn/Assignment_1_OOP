@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <regex>
+#include <unordered_map>
 #include "FileReader.h"
 #include "Airplane.h"
 #include "BookingManager.h"
@@ -23,6 +24,12 @@ int main() {
     if (flights.empty()) {
         cerr << "No flight data loaded. Exiting." << endl;
         return 1;
+    }
+
+    unordered_map<string, Airplane*> flightIndex;
+    for (auto& flight : flights) {
+        string key = flight.getDate() + "_" + flight.getFlightNumber();
+        flightIndex[key] = &flight;
     }
 
     BookingManager bookingManager(flights);
